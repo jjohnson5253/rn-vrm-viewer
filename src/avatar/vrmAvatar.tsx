@@ -162,27 +162,27 @@ export const VRMAvatar = () => {
     }, [models]);
 
     // updates 3D text when meta is updated
-    useEffect(() => {
-        if (currentModel && scene) {
-            // let displayText = currentModel?.split('/').pop().split('.')[0];
-            let displayText = Asset.fromURI(currentModel).name;
-            console.log('currentModel', currentModel);
-            // add text mesh to scene
-            if (text3d) {
-                scene.remove(text3d);
-            }
-            if (meta?.metaVersion === '0' && meta?.title) {
-                displayText = meta?.title;
-            } else if (meta?.metaVersion === '1' && meta?.name) {
-                displayText = meta?.name;
-            }
+    // useEffect(() => {
+    //     if (currentModel && scene) {
+    //         // let displayText = currentModel?.split('/').pop().split('.')[0];
+    //         let displayText = Asset.fromURI(currentModel).name;
+    //         console.log('currentModel', currentModel);
+    //         // add text mesh to scene
+    //         if (text3d) {
+    //             scene.remove(text3d);
+    //         }
+    //         if (meta?.metaVersion === '0' && meta?.title) {
+    //             displayText = meta?.title;
+    //         } else if (meta?.metaVersion === '1' && meta?.name) {
+    //             displayText = meta?.name;
+    //         }
 
-            const textMesh = createText(font, displayText, 'silver');
-            setText3d(textMesh);
-            scene.add(textMesh);
-            textMesh.position.set(0, 4, -16);
-        }
-    }, [meta, scene]);
+    //         const textMesh = createText(font, displayText, 'silver');
+    //         setText3d(textMesh);
+    //         scene.add(textMesh);
+    //         textMesh.position.set(0, 4, -16);
+    //     }
+    // }, [meta, scene]);
 
     // adds web events: mousemovements and file drops
     useEffect(() => {
@@ -257,7 +257,7 @@ export const VRMAvatar = () => {
         setScene(scene);
 
         // three.js skybox
-        setupSkybox(scene, daylightSkybox);
+        //setupSkybox(scene, daylightSkybox);
 
         // three.js render
         const renderer = new Renderer({ gl });
@@ -500,48 +500,7 @@ export const VRMAvatar = () => {
                         alignSelf: 'center',
                     }}
                 />
-                <View style={{ position: 'absolute', bottom: 30, left: 20 }}>
-                    {meta &&
-                        Object.keys(meta).map((key, index) => (
-                            <Text key={index}>
-                                {key}: {JSON.stringify(meta[key])}
-                            </Text>
-                        ))}
-                </View>
                 {loading ? <LoadingModel height={800} /> : null}
-            </View>
-            <Heading title="Models" styles={{ margin: 10 }} />
-            <View style={{ padding: 15, flexDirection: 'row', justifyContent: 'center' }}>
-                {models &&
-                    models.map((asset, idx) => (
-                        <View key={idx} style={{ paddingHorizontal: 15 }}>
-                            <Button
-                                title={`${asset.name.split('.')[0]}`}
-                                onPress={() => loadModel(models[idx].localUri)}
-                            />
-                        </View>
-                    ))}
-                {additionalModels &&
-                    additionalModels.map((asset, idx) => (
-                        <View key={idx} style={{ paddingHorizontal: 15 }}>
-                            <Button
-                                title={`${asset.name.split('.')[0]}`}
-                                onPress={() => loadModel(asset.uri)}
-                            />
-                        </View>
-                    ))}
-            </View>
-            <Heading title="Emotes" styles={{ margin: 10 }} />
-            <View style={{ padding: 15, flexDirection: 'row', justifyContent: 'center' }}>
-                {expressions.map((expression, idx) => (
-                    <View key={idx} style={{ paddingHorizontal: 15 }}>
-                        <Button
-                            title={expression.name}
-                            onPress={() => makeEmote(expression.name, expression.duration)}
-                        />
-                    </View>
-                ))}
-                <Button title="Emote: Speak" onPress={() => speakTest()} />
             </View>
             <Heading title="Animations" styles={{ margin: 10 }} />
             <View style={{ padding: 15, flexDirection: 'row', justifyContent: 'center' }}>
@@ -555,17 +514,6 @@ export const VRMAvatar = () => {
                           </View>
                       ))
                     : null}
-            </View>
-            <Heading title="Toggle Cursor Follow" styles={{ margin: 10 }} />
-            <View style={{ padding: 15, flexDirection: 'row', justifyContent: 'center' }}>
-                <View style={{ paddingHorizontal: 15 }}>
-                    <Button
-                        title={activeLookAt ? 'Enabled' : 'Disabled'}
-                        onPress={() => toggleLookAtTarget()}
-                        color={activeLookAt ? 'green' : 'red'}
-                    />
-                    {/* <CheckBox style={{ height: 32, width: 32 }} value={activeLookAt} /> */}
-                </View>
             </View>
         </View>
     );
